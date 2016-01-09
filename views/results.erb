@@ -5,10 +5,14 @@
 </head>
 <body>
 	<p>Results for <%= @query %></p>
-	<% @suggestions.each do |place| %>
-		<p><%= place['name'] %></p>
-		<p><%= place['formatted_address'] %></p>
-		<p><%= place['rating'] %></p>
+	<% if @suggestions == :error %>
+		<p>Whoops, something went wrong.</p>
+	<% else %>
+		<% @suggestions.each do |place| %>
+			<p><%= place['name'] %></p>
+			<p><%= place['formatted_address'] %></p>
+			<p><%= place['rating'] %></p>
+		<% end %>
 	<% end %>
 </body>
 </html>
