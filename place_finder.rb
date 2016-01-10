@@ -22,9 +22,7 @@ end
 get '/place/:name' do
   @name = params[:name]
   google_places_result = GooglePlacesTextSearch.text_search(@name)
-  # p google_places_result
   @rating = google_places_result.first['rating']
   @booking_data = BookingScraping.new.get_data(@name)
   erb :place
 end
-

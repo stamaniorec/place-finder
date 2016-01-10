@@ -19,9 +19,7 @@ class BookingScraping
 
   def get_suggestions_page(place_name)
     url = get_search_url(place_name)
-    @browser.get(url) do |suggestions_page|
-      suggestions_page
-    end
+    @browser.get(url)
   end
 
   def navigate_to_hotel_page(suggestions_page, place_name)
@@ -42,29 +40,43 @@ class BookingScraping
     end
   end
 
+  def get_stars(hotel_page)
+    hotel_page.at('.star_track')['title'].split.first.to_i rescue nil
+  end
+
+  def get_location(hotel_page)
+    hotel_page.at('.facility-badge__title').inner_html.split("\n").last rescue nil
+  end
+
+  def get_score_word(hotel_page)
+    hotel_page.at('.js--hp-scorecard-scoreword').inner_html rescue nil
+  end
+
+  def get_score_value(hotel_page)
+    hotel_page.at('.js--hp-scorecard-scoreval').inner_html.to_f rescue nil
+  end
+
+  def get_link_to(hotel_page)
+    hotel_page.uri.to_s
+  end
+
   def get_data(place_name)
     hotel_page = get_hotel_page(place_name)
 
-    data = {}
-
-    if hotel_page == :not_found
-      data[:status] = :not_found
-    else
-      data[:status] = :ok
-      stars = hotel_page.at('.star_track')['title'].split.first.to_i
-      data[:stars] = stars
-      location = hotel_page.at('.facility-badge__title').inner_html.split("\n").last
-      data[:location] = location
-      rating_word = hotel_page.at('.js--hp-scorecard-scoreword').inner_html
-      data[:rating_word] = rating_word
-      rating_score = hotel_page.at('.js--hp-scorecard-scoreval').inner_html.to_f
-      data[:rating_score] = rating_score
-      data[:link_to_booking] = hotel_page.uri.to_s
+    {}.tap do |data|
+      if hotel_page == :not_found
+        data[:status] = :not_found
+      else
+        data[:status] = :ok
+        data[:stars] = get_stars(hotel_page)
+        data[:location] = get_location(hotel_page)
+        data[:score_word] = get_score_word(hotel_page)
+        data[:rating_score] = get_score_value(hotel_page)
+        data[:link_to_booking] = get_link_to(hotel_page)
+      end
     end
-
-    data
   end
 end
 
 a = BookingScraping.new
-p a.get_data('Ephesia Holiday Beach Club')
+p a.get_data('Новотел София')
