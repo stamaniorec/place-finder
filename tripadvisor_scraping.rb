@@ -1,15 +1,11 @@
 require 'mechanize'
 require 'sanitize'
 
-class TripAdvisorScraping
-  def initialize
-    @browser = Mechanize.new do |agent|
-      agent.user_agent_alias = 'Mac Safari'
-    end
-  end
+require_relative 'base_scraper'
 
-  def get_search_url(place_name)
-    "http://www.tripadvisor.com/Search?q=#{place_name}"
+class TripAdvisorScraping < BaseScraper
+  def endpoint
+    'http://www.tripadvisor.com/'
   end
 
   def found_place?(page, target)
@@ -18,42 +14,31 @@ class TripAdvisorScraping
     end
   end
 
+  def get_container_div(suggestions_page)
+    suggestions_page.search('.title')[1]
+  end
+
+  def get_div_onclick_value(div)
+    div['onclick'].match(/\/[\w-]+.html/).to_s
+  end
+
+  def get_target_link(onclick_value)
+    endpoint + onclick_value
+  end
+
   def navigate_to_hotel_page(suggestions_page, place_name)
-    a = suggestions_page.search('.title')[1]
-    b = a['onclick'].match(/\/[\w-]+.html/).to_s
-    c = 'http://www.tripadvisor.com/' + b
-    @browser.get(c)
-  end
-
-  def get_suggestions_page(place_name)
-    url = get_search_url(place_name)
-    @browser.get(url)
-  end
-
-  def get_hotel_page(place_name)
-    suggestions_page = get_suggestions_page(place_name)
-
-    if found_place?(suggestions_page, place_name)
-      navigate_to_hotel_page(suggestions_page, place_name)
-    else
-      :not_found
-    end
+    container_div = get_container_div(suggestions_page)
+    onclick_value = get_div_onclick_value(container_div)
+    @browser.get(get_target_link(onclick_value))
   end
 
   def get_rating_value(hotel_page)
     hotel_page.at('img[property=\'ratingValue\']').attribute('alt').inner_html rescue nil
   end
 
-  def get_data(place_name)
-    hotel_page = get_hotel_page(place_name)
-
-    {}.tap do |data|
-      if hotel_page == :not_found
-        data[:status] = :not_found
-      else
-        data[:status] = :ok
-        data[:rating_value] = get_rating_value(hotel_page)
-      end
+  def build_data(hotel_page, data)
+    data.tap do |data|
+      data[:rating_value] = get_rating_value(hotel_page)
     end
   end
 end

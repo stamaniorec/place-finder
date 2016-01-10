@@ -60,6 +60,15 @@ class BookingScraping
     hotel_page.uri.to_s
   end
 
+  def build_data(hotel_page, data)
+    data[:stars] = get_stars(hotel_page)
+    data[:location] = get_location(hotel_page)
+    data[:score_word] = get_score_word(hotel_page)
+    data[:rating_score] = get_score_value(hotel_page)
+    data[:link_to_booking] = get_link_to(hotel_page)
+    data
+  end
+
   def get_data(place_name)
     hotel_page = get_hotel_page(place_name)
 
@@ -68,11 +77,7 @@ class BookingScraping
         data[:status] = :not_found
       else
         data[:status] = :ok
-        data[:stars] = get_stars(hotel_page)
-        data[:location] = get_location(hotel_page)
-        data[:score_word] = get_score_word(hotel_page)
-        data[:rating_score] = get_score_value(hotel_page)
-        data[:link_to_booking] = get_link_to(hotel_page)
+        build_data(hotel_page, data)
       end
     end
   end
