@@ -8,6 +8,10 @@ class TripAdvisorScraping < BaseScraper
     'http://www.tripadvisor.com/'
   end
 
+  def get_search_url(place_name)
+    "#{endpoint}Search?q=#{place_name}"
+  end
+
   def found_place?(page, target)
     page.search('.title').any? do |place_name|
       Sanitize.clean(place_name.child.inner_html) == target

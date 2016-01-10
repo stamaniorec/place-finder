@@ -5,10 +5,6 @@ class BaseScraper
     end
   end
 
-  def get_search_url(place_name)
-    "#{endpoint}Search?q=#{place_name}"
-  end
-
   def get_suggestions_page(place_name)
     url = get_search_url(place_name)
     @browser.get(url)
