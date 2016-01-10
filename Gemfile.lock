@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     backports (3.6.7)
+    crass (1.0.2)
     domain_name (0.5.25)
       unf (>= 0.0.5, < 1.0.0)
     http-cookie (1.0.2)
@@ -22,12 +23,18 @@ GEM
     net-http-persistent (2.9.4)
     nokogiri (1.6.7.1)
       mini_portile2 (~> 2.0.0.rc2)
+    nokogumbo (1.4.7)
+      nokogiri
     ntlm-http (0.1.1)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
+    sanitize (4.0.1)
+      crass (~> 1.0.2)
+      nokogiri (>= 1.4.4)
+      nokogumbo (~> 1.4.1)
     sinatra (1.4.6)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -51,6 +58,7 @@ PLATFORMS
 DEPENDENCIES
   mechanize
   nokogiri
+  sanitize
   sinatra
   sinatra-contrib
 

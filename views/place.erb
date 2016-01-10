@@ -7,7 +7,7 @@
 	<p>Place name: <%= @name %></p>
 	<p>Rating: <%= @rating %></p>
 	<p>Booking data below</p>
-	<% if @booking_data == :not_found %>
+	<% if @booking_data['status'] == :not_found %>
 		<p>Couldn't find <% @name %> on Booking.com</p>
 	<% else %>
 		<p><%= @booking_data%></p>
