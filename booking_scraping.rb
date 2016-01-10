@@ -44,14 +44,25 @@ class BookingScraping
 
   def get_data(place_name)
     hotel_page = get_hotel_page(place_name)
+
+    data = {}
+
     if hotel_page == :not_found
-      return "not found :("
+      data[:status] = :not_found
     else
-      hotel_page.at('#hp_hotel_name').inner_html
-      # ...
+      data[:status] = :ok
+      stars = hotel_page.at('.star_track')['title'].split.first.to_i
+      data[:stars] = stars
+      location = hotel_page.at('.facility-badge__title').inner_html.split("\n").last
+      data[:location] = location
+      rating_word = hotel_page.at('.js--hp-scorecard-scoreword').inner_html
+      data[:rating_word] = rating_word
+      rating_score = hotel_page.at('.js--hp-scorecard-scoreval').inner_html.to_f
+      data[:rating_score] = rating_score
+      data[:link_to_booking] = hotel_page.uri.to_s
     end
-    # fill data hash
-    # return data
+
+    data
   end
 end
 
