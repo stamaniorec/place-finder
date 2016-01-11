@@ -12,5 +12,11 @@
 	<% else %>
 		<p><%= @booking_data%></p>
 	<% end %>
+	<p>Tripadvisor data below</p>
+	<% if @tripadvisor_data['status'] == :not_found %>
+		<p>Couldn't find <% @name %> on Tripadvisor.com</p>
+	<% else %>
+		<p><%= @tripadvisor_data%></p>
+	<% end %>
 </body>
 </html>

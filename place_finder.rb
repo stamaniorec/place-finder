@@ -3,6 +3,7 @@ require 'sinatra/reloader' if development?
 
 require_relative 'booking_scraping'
 require_relative 'google_places'
+require_relative 'tripadvisor_scraping'
 
 helpers do
   def get_suggestions(query)
@@ -24,5 +25,6 @@ get '/place/:name' do
   google_places_result = GooglePlaces::TextSearch::text_search(@name)
   @rating = google_places_result.first['rating']
   @booking_data = BookingScraping.new.get_data(@name)
+  @tripadvisor_data = TripAdvisorScraping.new.get_data(@name)
   erb :place
 end

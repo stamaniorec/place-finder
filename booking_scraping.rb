@@ -44,10 +44,10 @@ class BookingScraping < BaseScraper
   def build_data(hotel_page, data)
     data.tap do |data|
       data[:stars] = get_stars(hotel_page)
-      data[:location] = get_location(hotel_page)
-      data[:score_word] = get_score_word(hotel_page)
-      data[:rating_score] = get_score_value(hotel_page)
-      data[:link_to_booking] = get_link_to(hotel_page)
+      data[:location_perk] = get_location(hotel_page)
+      data[:booking_score_word] = get_score_word(hotel_page)
+      data[:booking_rating_score] = get_score_value(hotel_page)
+      data[:booking_link] = get_link_to(hotel_page)
     end
   end
 end

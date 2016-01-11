@@ -40,9 +40,37 @@ class TripAdvisorScraping < BaseScraper
     hotel_page.at('img[property=\'ratingValue\']').attribute('alt').inner_html rescue nil
   end
 
+  def get_tags(hotel_page)
+    hotel_page.search('.tag').drop(1).map(&:inner_html)
+  end
+
+  def get_rank_text(hotel_page)
+    Sanitize.clean(hotel_page.at('.rank_text').inner_html.strip)
+  end
+
+  def get_highlight_tags(hotel_page)
+    container_div = hotel_page.at('.amenity_cnt')
+    property_tags_wrap_div = container_div.children[3]
+    property_tags_ul = property_tags_wrap_div.children[1]
+
+    property_tags_ul.children.map do |li|
+      Sanitize.clean(li.inner_html).strip
+    end.select do |tag|
+      not tag.empty?
+    end
+  end
+
+  def get_link_to(hotel_page)
+    hotel_page.uri.to_s
+  end
+
   def build_data(hotel_page, data)
     data.tap do |data|
-      data[:rating_value] = get_rating_value(hotel_page)
+      data[:tripadvisor_rating_score] = get_rating_value(hotel_page)
+      data[:tags] = get_tags(hotel_page)
+      data[:tripadvisor_rank_text] = get_rank_text(hotel_page)
+      data[:tripadvisor_highlights_tags] = get_highlight_tags(hotel_page)
+      data[:tripadvisor_link] = get_link_to(hotel_page)
     end
   end
 end
