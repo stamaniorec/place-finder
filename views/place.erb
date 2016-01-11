@@ -5,7 +5,13 @@
 </head>
 <body>
 	<p>Place name: <%= @name %></p>
-	<p>Rating: <%= @rating %></p>
+	<p><%= @data %></p>
+	<p>Google Places data below</p>
+	<% if @google_places_data == :error %>
+		<p>Whoops, something went wrong with Google Places</p>
+	<% else %>
+		<p><%= @google_places_data %></p>
+	<% end %>
 	<p>Booking data below</p>
 	<% if @booking_data['status'] == :not_found %>
 		<p>Couldn't find <% @name %> on Booking.com</p>

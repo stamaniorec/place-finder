@@ -39,7 +39,7 @@ module GooglePlaces
     end
 
     def self.place_details(place_id)
-      request(url(place_id)) do |response|
+      GooglePlaces::request(url(place_id)) do |response|
         response['result']
       end
     end
