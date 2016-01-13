@@ -53,4 +53,4 @@ class BookingScraping < BaseScraper
 end
 
 a = BookingScraping.new
-p a.get_data('Новотел София')
+# p a.get_data('Новотел София')
