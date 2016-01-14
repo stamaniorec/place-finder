@@ -1,3 +1,5 @@
+require 'mechanize'
+
 class BaseScraper
   def initialize
     @browser = Mechanize.new do |agent|
