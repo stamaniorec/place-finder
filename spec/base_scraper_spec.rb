@@ -1,4 +1,4 @@
-require_relative 'base_scraper'
+require_relative '../scrapers/base_scraper'
 
 describe BaseScraper do
   subject(:base_scraper) { BaseScraper.new }

@@ -1,4 +1,5 @@
-require_relative 'tripadvisor_scraping'
+require_relative '../scrapers/tripadvisor_scraping'
+require 'nokogiri'
 
 describe TripAdvisorScraping do
   subject(:tripadvisor) { TripAdvisorScraping.new }
@@ -42,6 +43,14 @@ describe TripAdvisorScraping do
       page = create_page(first_div + second_div)
 
       expect(tripadvisor.get_container_div(page).to_html).to eq(second_div)
+    end
+  end
+
+  describe '#get_div_onclick_value' do
+    it 'gets the div onclick attribute value from the container div' do
+      page = Nokogiri::HTML('<div class="title" onclick="blabla..., /myonclickvalue.html">...</div>')
+      div = page.css('div').first
+      expect(tripadvisor.get_div_onclick_value(div)).to eq("/myonclickvalue.html")
     end
   end
 end

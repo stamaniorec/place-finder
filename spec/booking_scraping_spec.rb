@@ -1,4 +1,4 @@
-require_relative 'booking_scraping'
+require_relative '../scrapers/booking_scraping'
 
 describe BookingScraping do
   subject(:booking) { BookingScraping.new }
