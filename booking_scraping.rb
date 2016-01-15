@@ -37,10 +37,6 @@ class BookingScraping < BaseScraper
     hotel_page.at('.js--hp-scorecard-scoreval').inner_html.to_f rescue nil
   end
 
-  def get_link_to(hotel_page)
-    hotel_page.uri.to_s
-  end
-
   def build_data(hotel_page, data)
     data.tap do |data|
       data[:stars] = get_stars(hotel_page)

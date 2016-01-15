@@ -25,6 +25,18 @@ describe BaseScraper do
     end
   end
 
+  describe '#get_link_to' do
+    it 'returns the URI of the given hotel page as a string' do
+      booking = BaseScraper.new
+
+      hotel_page = double
+      uri = URI::HTTP.build({host: 'www.google.bg', path: ''})
+      allow(hotel_page).to receive(:uri).and_return(uri)
+
+      expect(booking.get_link_to(hotel_page)).to eq('http://www.google.bg')
+    end
+  end
+
   describe '#get_data' do
     context 'place name exists, page is found' do
       it 'builds hash with key :status equal to :ok' do

@@ -22,6 +22,10 @@ class BaseScraper
     end
   end
 
+  def get_link_to(hotel_page)
+    hotel_page.uri.to_s
+  end
+
   def get_data(place_name)
     hotel_page = get_hotel_page(place_name)
 

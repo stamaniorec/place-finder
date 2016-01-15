@@ -60,10 +60,6 @@ class TripAdvisorScraping < BaseScraper
     end
   end
 
-  def get_link_to(hotel_page)
-    hotel_page.uri.to_s
-  end
-
   def build_data(hotel_page, data)
     data.tap do |data|
       data[:tripadvisor_rating_score] = get_rating_value(hotel_page)
@@ -76,4 +72,4 @@ class TripAdvisorScraping < BaseScraper
 end
 
 a = TripAdvisorScraping.new
-p a.get_data('Pine Bay Holiday Resort')
+# p a.get_data('Pine Bay Holiday Resort')
