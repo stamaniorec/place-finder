@@ -12,7 +12,8 @@ get '/' do
 end
 
 post '/' do
-  @suggestions = get_suggestions(params[:search])
+  @query = params[:search]
+  @suggestions = get_suggestions(@query)
   erb :results
 end
 

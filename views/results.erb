@@ -2,18 +2,54 @@
 <html>
 <head>
 	<title>Placefinder</title>
+	<link href="/css/bootstrap.min.css" rel="stylesheet" />
+	<style>
+		body {
+			background-color: #81b33a;
+		}
+
+		.panel {
+			margin-top: 20px;
+			width: 90%;
+		}
+
+		h3 {
+			margin-top: 0;
+			color: #81b33a;
+		}
+
+		.list-group-item-heading {
+			color: #81b33a;
+		}
+
+		.list-group-item-heading:hover {
+			text-decoration: underline;
+		}
+		
+	</style>
 </head>
 <body>
-	<p>Results for <%= @query %></p>
-	<% if @suggestions == :error %>
-		<p>Whoops, something went wrong.</p>
-	<% else %>
-		<% @suggestions.each do |place| %>
-			<p><%= place['name'] %></p>
-			<p><%= place['formatted_address'] %></p>
-			<p><%= place['rating'] %></p>
-			<p><a href="/place/<%= place['name'] %>">Get more info</a></p>
-		<% end %>
-	<% end %>
+	<div class="panel panel-default center-block">
+		<div class="panel-heading">
+			<h3 class="panel-title">Results for "<%= @query %>"</h3>
+		</div>
+		<div class="panel-body">
+			<a href="/"><h3>Search again</h3></a>
+			<% if @suggestions == :error %>
+				<h3>Whoops, something went wrong.</h3>
+			<% else %>
+				<div class="list-group">
+				<% @suggestions.each do |place| %>
+					<div class="list-group-item">
+						<a href="/place/<%= place['name'] %>">
+							<h3 class="list-group-item-heading"><%= place['name'] %></h4>
+						</a>
+						<p class="list-group-item-text"><%= place['formatted_address'] %></p>
+					</div>
+				<% end %>
+				</div>
+			<% end %>
+		</div>
+	</div>
 </body>
 </html>
