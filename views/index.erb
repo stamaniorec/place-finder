@@ -2,13 +2,19 @@
 <html>
 <head>
 	<title>Placefinder</title>
+	<link href="/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
 	<p>Hello world!</p>
+	<p>What place are you looking for?</p>
 	<form method="post">
-		<p>What place are you looking for?</p>
-		<input type="text" name="search" />
-		<input type="submit" value="Search" />
+		<div class="form-group col-md-3">
+			<input type="text" name="search" class="form-control" width="50"/>
+		</div>
+		<button type="submit" class="btn btn-default">Search</button>
 	</form>
+
+	<script src="/js/jquery-2.1.4.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
 </body>
 </html>
