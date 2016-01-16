@@ -19,6 +19,5 @@ end
 
 get '/place/:name' do
   @data = build_data(params[:name])
-  p @data
   erb :place
 end
