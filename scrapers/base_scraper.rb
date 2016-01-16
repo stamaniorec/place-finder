@@ -31,9 +31,9 @@ class BaseScraper
 
     {}.tap do |data|
       if hotel_page == :not_found
-        data[:status] = :not_found
+        set_error(data)
       else
-        data[:status] = :ok
+        set_success(data)
         build_data(hotel_page, data)
       end
     end

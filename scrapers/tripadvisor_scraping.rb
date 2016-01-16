@@ -60,6 +60,14 @@ class TripAdvisorScraping < BaseScraper
     end
   end
 
+  def set_error(data)
+    data.tap { |data| data[:tripadvisor_status] = :not_found }
+  end
+
+  def set_success(data)
+    data.tap { |data| data[:tripadvisor_status] = :ok }
+  end
+
   def build_data(hotel_page, data)
     data.tap do |data|
       data[:tripadvisor_rating_score] = get_rating_value(hotel_page)

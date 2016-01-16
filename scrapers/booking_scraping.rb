@@ -37,6 +37,14 @@ class BookingScraping < BaseScraper
     hotel_page.at('.js--hp-scorecard-scoreval').inner_html.to_f rescue nil
   end
 
+  def set_error(data)
+    data.tap { |data| data[:booking_status] = :not_found }
+  end
+
+  def set_success(data)
+    data.tap { |data| data[:booking_status] = :ok }
+  end
+
   def build_data(hotel_page, data)
     data.tap do |data|
       data[:stars] = get_stars(hotel_page)

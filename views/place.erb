@@ -4,25 +4,44 @@
 	<title>Placefinder</title>
 </head>
 <body>
-	<p>Place name: <%= @name %></p>
-	<p><%= @data %></p>
-	<p>Google Places data below</p>
-	<% if @google_places_data == :error %>
-		<p>Whoops, something went wrong with Google Places</p>
+	<%= @data %>
+	<% if @data['status'] and @data['status'] != 'OK' %>
+		<p>Not found on Google Places. :(</p>
 	<% else %>
-		<p><%= @google_places_data %></p>
+		<p>Name: <%= @data['name'] %></p>
+		<p>Address: <%= @data['adr_address'] %></p>
+		<p>Phone number: <%= @data['formatted_phone_number'] %></p>
+		<p>International phone number: <%= @data['international_phone_number'] %></p>
+		<p>Rating: <%= @data['rating'] %></p>
+		<p>Reviews:</p>
+		<% @data['reviews'].each do |review| %>
+			<p>By <%= review['author_name'] %></p>
+			<p>Rating <%= review['rating'] %></p>
+			<p><%= review['text'] %></p>
+		<% end %>
+		<a href="<%= @data['url'] %>"><p>Check out on Google Maps</p></a>
+		<p>Website: <%= @data['website'] %></p>
 	<% end %>
-	<p>Booking data below</p>
-	<% if @booking_data['status'] == :not_found %>
-		<p>Couldn't find <% @name %> on Booking.com</p>
-	<% else %>
-		<p><%= @booking_data%></p>
+
+	<% if @data[:booking_status] == :ok %>
+		<p>Location perk: <%= @data[:location_perk] %></p>
+		<p>booking_score_word: <%= @data[:booking_score_word] %></p>
+		<p>booking_rating_score: <%= @data[:booking_rating_score] %></p>
+		<a href="<%= @data[:booking_link] %>"><p>Check out on booking</p></a>
 	<% end %>
-	<p>Tripadvisor data below</p>
-	<% if @tripadvisor_data['status'] == :not_found %>
-		<p>Couldn't find <% @name %> on Tripadvisor.com</p>
-	<% else %>
-		<p><%= @tripadvisor_data%></p>
+
+	<% if @data[:tripadvisor_status] == :ok %>
+		<p>tripadvisor_rank_text: <%= @data[:tripadvisor_rank_text] %></p>
+		<p>tripadvisor_rating_score: <%= @data[:tripadvisor_rating_score] %></p>
+		<a href="<%= @data[:tripadvisor_link] %>"><p>Check out on TripAdvisor</p></a>
+		<p>Tags:</p>
+		<% @data[:tags].each do |tag| %>
+			<p><%= tag %></p>
+		<% end %>
+		<p>TripAdvisor highlight tags:</p>
+		<% @data[:tripadvisor_highlights_tags].each do |tag| %>
+			<p><%= tag %></p>
+		<% end %>
 	<% end %>
 </body>
 </html>

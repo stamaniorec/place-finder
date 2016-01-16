@@ -11,7 +11,7 @@ module GooglePlaces
     if json_response['status'] == 'OK'
       yield json_response
     else
-      :error
+      json_response
     end
   end
 
