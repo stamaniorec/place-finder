@@ -38,20 +38,11 @@ describe BaseScraper do
   end
 
   describe '#get_data' do
-    context 'place name exists, page is found' do
-      it 'builds hash with key :status equal to :ok' do
-        allow(base_scraper).to receive(:get_hotel_page).and_return('page')
-        allow(base_scraper).to receive(:build_data).and_return(nil)
-        expect(base_scraper.get_data('name')).to include({status: :ok})
-      end
-    end
-
-    context 'place does not exist, page is not found' do
-      it 'builds hash with key :status equal to :not_found' do
-        place_name = 'myplacename'
-        allow(base_scraper).to receive(:get_hotel_page).with(place_name).and_return(:not_found)
-        expect(base_scraper.get_data(place_name)).to include({status: :not_found})
-      end
+    it 'returns a hash' do
+      allow(base_scraper).to receive(:get_hotel_page)
+      allow(base_scraper).to receive(:set_success)
+      allow(base_scraper).to receive(:build_data)
+      expect(base_scraper.get_data('name')).to be_a Hash
     end
   end
 end
