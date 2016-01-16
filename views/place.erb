@@ -17,6 +17,15 @@
 			margin-top: 0;
 			color: #81b33a;
 		}
+
+		.carousel {
+			width: 80%;
+
+		}
+
+		.carousel-indicators li {
+			border-color: red !important;
+		}
 		
 	</style>
 </head>
@@ -25,27 +34,29 @@
 		<div class="panel-body">
 			<a href="/"><h3>Search again</h3></a>
 
-			
-
-
-			
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			<% if @data['status'] or @data['status'] != 'OK' %>
+			<% if @data.has_key?('status') and @data['status'] != 'OK' %>
 				<p>Not found on Google Places. :(</p>
 			<% else %>
+				<div id="gallery" class="carousel slide center-block" data-ride="carousel">
+					<!-- Indicators -->
+					<ol class="carousel-indicators">
+					</ol>
+
+					<!-- Wrapper for slides -->
+					<div class="carousel-inner" role="listbox">
+					</div>
+
+					<!-- Controls -->
+					<a class="left carousel-control" href="#gallery" role="button" data-slide="prev">
+						<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+						<span class="sr-only">Previous</span>
+					</a>
+					<a class="right carousel-control" href="#gallery" role="button" data-slide="next">
+						<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+						<span class="sr-only">Next</span>
+					</a>
+				</div>
+
 				<p>Name: <%= @data['name'] %></p>
 				<p>Address: <%= @data['adr_address'] %></p>
 				<p>Phone number: <%= @data['formatted_phone_number'] %></p>
@@ -64,23 +75,20 @@
 			<div id="booking_data">
 				<% if @data[:booking_status] == :ok %>
 					<p>Location perk: <%= @data[:location_perk] %></p>
-					<p>booking_score_word: <%= @data[:booking_score_word] %></p>
-					<p>booking_rating_score: <%= @data[:booking_rating_score] %></p>
-					<a href="<%= @data[:booking_link] %>"><p>Check out on booking</p></a>
+					<p>Score on Booking.com: <%= @data[:booking_score_word] %> <%= @data[:booking_rating_score] %></p>
+					<a href="<%= @data[:booking_link] %>"><p>Check out on Booking.com</p></a>
 				<% end %>
 			</div>
 
 			<% if @data[:tripadvisor_status] == :ok %>
-				<p>tripadvisor_rank_text: <%= @data[:tripadvisor_rank_text] %></p>
-				<p>tripadvisor_rating_score: <%= @data[:tripadvisor_rating_score] %></p>
-				<a href="<%= @data[:tripadvisor_link] %>"><p>Check out on TripAdvisor</p></a>
-				<p>Tags:</p>
-				<% @data[:tags].each do |tag| %>
-					<p><%= tag %></p>
-				<% end %>
+				<p><%= @data[:tripadvisor_rank_text] %></p>
+				<p>Score on Tripadvisor.com: <%= @data[:tripadvisor_rating_score] %></p>
+				<a href="<%= @data[:tripadvisor_link] %>"><p>Check out on TripAdvisor.com</p></a>
 				<p>TripAdvisor highlight tags:</p>
-				<% @data[:tripadvisor_highlights_tags].each do |tag| %>
-					<p><%= tag %></p>
+				<% if @data[:tripadvisor_highlights_tags] %>
+					<% @data[:tripadvisor_highlights_tags].each do |tag| %>
+						<p><%= tag %></p>
+					<% end %>
 				<% end %>
 			<% end %>
 		</div>
@@ -89,11 +97,71 @@
 	<script src="/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 			$(document).ready(function() {
-				$.ajax("/get_data/booking/<%= @name %>", {
-					method: "GET",
-					dataType: "json"
-				}).then(function(response) {
+				// Magic JS
+				$.ajaxTransport("+binary", function(options, originalOptions, jqXHR){
+					// check for conditions and support for blob / arraybuffer response type
+					if (window.FormData && ((options.dataType && (options.dataType == 'binary')) || (options.data && ((window.ArrayBuffer && options.data instanceof ArrayBuffer) || (window.Blob && options.data instanceof Blob)))))
+					{
+						return {
+							// create new XMLHttpRequest
+							send: function(headers, callback){
+						// setup all variables
+								var xhr = new XMLHttpRequest(),
+						url = options.url,
+						type = options.type,
+						async = options.async || true,
+						// blob or arraybuffer. Default is blob
+						dataType = options.responseType || "blob",
+						data = options.data || null,
+						username = options.username || null,
+						password = options.password || null;
+									
+								xhr.addEventListener('load', function(){
+							var data = {};
+							data[options.dataType] = xhr.response;
+							// make callback and send data
+							callback(xhr.status, xhr.statusText, data, xhr.getAllResponseHeaders());
+								});
+				 
+								xhr.open(type, url, async, username, password);
+								
+						// setup custom headers
+						for (var i in headers ) {
+							xhr.setRequestHeader(i, headers[i] );
+						}
+								
+								xhr.responseType = dataType;
+								xhr.send(data);
+							},
+							abort: function(){
+								jqXHR.abort();
+							}
+						};
+					}
 				});
+
+				<%# @data['photos'] = [{'photo_reference' => 'CmRdAAAApjJEerRZBZ-7vHGNSrZL2JSeZurqh1_l2ncyjzj8E4oY51zAtgEcQN6Trvo24jmCicD1s4ekayRt04RMUhZ9V5Q9ZB3OHcQYbW8vBH-14u_EbX72zEEPptHyhiRwH6rkEhCKzJUgMtxM6HFoYKoMYYJmGhR4k15lNgMMewqSeVqmURdc240x4A&key=AIzaSyBSRWdglaKrdSpIz14qipycfAR0WqwXEQs'}, {'photo_reference' => 'CmRdAAAApjJEerRZBZ-7vHGNSrZL2JSeZurqh1_l2ncyjzj8E4oY51zAtgEcQN6Trvo24jmCicD1s4ekayRt04RMUhZ9V5Q9ZB3OHcQYbW8vBH-14u_EbX72zEEPptHyhiRwH6rkEhCKzJUgMtxM6HFoYKoMYYJmGhR4k15lNgMMewqSeVqmURdc240x4A&key=AIzaSyBSRWdglaKrdSpIz14qipycfAR0WqwXEQs'}] %>
+				<% unless @data.has_key?('status') and @data['status'] != 'OK' %>
+					<% @data['photos'].each_with_index do |photo, index| %>
+						$.ajax("/get_photo/<%= photo['photo_reference'] %>", {
+							method: "GET",
+							dataType: "binary",
+							processData: false,
+							success: function(result){
+								var urlCreator = window.URL || window.webkitURL;
+								var imageUrl = urlCreator.createObjectURL( result );
+								<% if index == 0 %>
+									$(".carousel-indicators").append('<li data-target="#gallery" data-slide-to="<%= index %>" class="active"></li>');
+									$(".carousel-inner").append('<div class="item active"><img src="' + imageUrl + '" /></div>');
+								<% else %>
+									$(".carousel-indicators").append('<li data-target="#gallery" data-slide-to="<%= index %>"></li>');
+									$(".carousel-inner").append('<div class="item"><img src="' + imageUrl + '" /></div>');
+								<% end %>
+							},
+					
+						});
+					<% end %>
+				<% end %>
 			});
 			</script>
 </body>

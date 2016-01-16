@@ -44,4 +44,16 @@ module GooglePlaces
       end
     end
   end
+
+  module PlacePhoto
+    ENDPOINT = 'https://maps.googleapis.com/maps/api/place/photo?'
+
+    def self.url(photo_reference)
+      "#{ENDPOINT}max_width=800&photoreference=#{photo_reference}&key=#{KEY}"
+    end
+
+    def self.place_photo(photo_reference)
+      Net::HTTP.get(URI.parse(url(photo_reference)))
+    end
+  end
 end

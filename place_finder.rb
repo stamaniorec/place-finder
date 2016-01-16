@@ -23,8 +23,6 @@ get '/place/:name' do
   erb :place
 end
 
-require 'json'
-
-get '/get_data/booking/:name' do
-  BookingScraping.new.get_data(params[:name]).to_json
+get '/get_photo/:photo_reference' do
+  GooglePlaces::PlacePhoto::place_photo(params[:photo_reference])
 end

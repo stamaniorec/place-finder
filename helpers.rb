@@ -14,7 +14,7 @@ helpers do
   end
 
   def build_data(name)
-    google_places = {}#get_google_places_data(name)
+    google_places = get_google_places_data(name)
     booking = BookingScraping.new.get_data(name)
     tripadvisor = TripAdvisorScraping.new.get_data(name)
 

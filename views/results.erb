@@ -35,7 +35,7 @@
 		</div>
 		<div class="panel-body">
 			<a href="/"><h3>Search again</h3></a>
-			<% if @suggestions == :error %>
+			<% if @suggestions.has_key?('status') and @suggestions['status'] != 'OK' %>
 				<h3>Whoops, something went wrong.</h3>
 			<% else %>
 				<div class="list-group">
