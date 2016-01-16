@@ -18,6 +18,13 @@ post '/' do
 end
 
 get '/place/:name' do
-  @data = build_data(params[:name])
+  @name = params[:name]
+  @data = build_data(@name)
   erb :place
+end
+
+require 'json'
+
+get '/get_data/booking/:name' do
+  BookingScraping.new.get_data(params[:name]).to_json
 end

@@ -24,7 +24,26 @@
 	<div class="panel panel-default center-block">
 		<div class="panel-body">
 			<a href="/"><h3>Search again</h3></a>
-			<% if @data['status'] and @data['status'] != 'OK' %>
+
+			
+
+
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			<% if @data['status'] or @data['status'] != 'OK' %>
 				<p>Not found on Google Places. :(</p>
 			<% else %>
 				<p>Name: <%= @data['name'] %></p>
@@ -42,12 +61,14 @@
 				<p>Website: <%= @data['website'] %></p>
 			<% end %>
 
-			<% if @data[:booking_status] == :ok %>
-				<p>Location perk: <%= @data[:location_perk] %></p>
-				<p>booking_score_word: <%= @data[:booking_score_word] %></p>
-				<p>booking_rating_score: <%= @data[:booking_rating_score] %></p>
-				<a href="<%= @data[:booking_link] %>"><p>Check out on booking</p></a>
-			<% end %>
+			<div id="booking_data">
+				<% if @data[:booking_status] == :ok %>
+					<p>Location perk: <%= @data[:location_perk] %></p>
+					<p>booking_score_word: <%= @data[:booking_score_word] %></p>
+					<p>booking_rating_score: <%= @data[:booking_rating_score] %></p>
+					<a href="<%= @data[:booking_link] %>"><p>Check out on booking</p></a>
+				<% end %>
+			</div>
 
 			<% if @data[:tripadvisor_status] == :ok %>
 				<p>tripadvisor_rank_text: <%= @data[:tripadvisor_rank_text] %></p>
@@ -64,5 +85,16 @@
 			<% end %>
 		</div>
 	</div>
+	<script src="/js/jquery-2.1.4.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+			$(document).ready(function() {
+				$.ajax("/get_data/booking/<%= @name %>", {
+					method: "GET",
+					dataType: "json"
+				}).then(function(response) {
+				});
+			});
+			</script>
 </body>
 </html>
