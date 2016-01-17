@@ -35,13 +35,13 @@
 		</div>
 		<div class="panel-body">
 			<a href="/"><h3>Search again</h3></a>
-			<% if @suggestions.has_key?('status') and @suggestions['status'] != 'OK' %>
-				<h3>Whoops, something went wrong.</h3>
+			<% if @suggestions.is_a? Hash %>
+				<h3>Whoops, something went wrong. Try again, maybe?</h3>
 			<% else %>
 				<div class="list-group">
 				<% @suggestions.each do |place| %>
 					<div class="list-group-item">
-						<a href="/place/<%= place['name'] %>">
+						<a href="/place/<%= place['name'] %>/<%= place['place_id'] %>">
 							<h3 class="list-group-item-heading"><%= place['name'] %></h4>
 						</a>
 						<p class="list-group-item-text"><%= place['formatted_address'] %></p>

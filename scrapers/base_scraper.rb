@@ -16,6 +16,7 @@ class BaseScraper
     suggestions_page = get_suggestions_page(place_name)
 
     if found_place?(suggestions_page, place_name)
+      p "at page #{suggestions_page.uri.to_s} looking for #{place_name}"
       navigate_to_hotel_page(suggestions_page, place_name)
     else
       :not_found

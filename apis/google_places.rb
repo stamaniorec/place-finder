@@ -49,7 +49,7 @@ module GooglePlaces
     ENDPOINT = 'https://maps.googleapis.com/maps/api/place/photo?'
 
     def self.url(photo_reference)
-      "#{ENDPOINT}max_width=800&photoreference=#{photo_reference}&key=#{KEY}"
+      "#{ENDPOINT}maxwidth=1920&maxheight=400&photoreference=#{photo_reference}&key=#{KEY}"
     end
 
     def self.place_photo(photo_reference)

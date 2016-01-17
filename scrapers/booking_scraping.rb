@@ -17,8 +17,7 @@ class BookingScraping < BaseScraper
     link_to_hotel_list = suggestions_page.link_with(text: place_name)
     hotel_list = link_to_hotel_list.click
 
-    target_place_link = hotel_list.link_with(text: "\n#{place_name}\n")
-    target_place_link.click
+    @browser.click(hotel_list.at('.hotel_name_link'))
   end
 
   def get_stars(hotel_page)
@@ -55,6 +54,3 @@ class BookingScraping < BaseScraper
     end
   end
 end
-
-a = BookingScraping.new
-# p a.get_data('Новотел София')

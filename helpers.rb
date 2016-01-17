@@ -13,8 +13,8 @@ helpers do
     google_places = GooglePlaces::PlaceDetails.place_details(google_place_id)
   end
 
-  def build_data(name)
-    google_places = get_google_places_data(name)
+  def build_data(name, place_id)
+    google_places = GooglePlaces::PlaceDetails.place_details(place_id)#get_google_places_data(name)
     booking = BookingScraping.new.get_data(name)
     tripadvisor = TripAdvisorScraping.new.get_data(name)
 

@@ -78,6 +78,3 @@ class TripAdvisorScraping < BaseScraper
     end
   end
 end
-
-a = TripAdvisorScraping.new
-# p a.get_data('Pine Bay Holiday Resort')
