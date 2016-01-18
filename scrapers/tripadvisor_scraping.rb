@@ -14,7 +14,17 @@ class TripAdvisorScraping < BaseScraper
 
   def found_place?(page, target)
     page.search('.title').any? do |place_name|
-      Sanitize.clean(place_name.child.inner_html) == target
+      # p 'god damn it'
+      # p Sanitize.clean(place_name.child.inner_html)
+      # p target
+      # if similar_enough?(Sanitize.clean(place_name.child.inner_html), target)
+      #   p '#########################################'
+      #   p "true for #{Sanitize.clean(place_name.child.inner_html)} and #{target}"
+      # end
+      similar_enough?(Sanitize.clean(place_name.child.inner_html), target)
+      # one = Sanitize.clean(place_name.child.inner_html.downcase)
+      # two = target.downcase
+      # one.chars.any? and (one.include?(two) or two.include?(one))
     end
   end
 

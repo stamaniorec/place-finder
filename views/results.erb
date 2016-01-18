@@ -41,6 +41,7 @@
 				<div class="list-group">
 				<% @suggestions.each do |place| %>
 					<div class="list-group-item">
+						<p><%= place %></p>
 						<a href="/place/<%= place['name'] %>/<%= place['place_id'] %>">
 							<h3 class="list-group-item-heading"><%= place['name'] %></h4>
 						</a>

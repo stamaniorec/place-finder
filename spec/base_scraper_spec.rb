@@ -14,6 +14,75 @@ describe BaseScraper do
     end
   end
 
+  describe '#similar_enough?' do
+    it 'returns true' do
+      b = 'Ephesia Hotel Kusadasi'
+      a = 'Ephesia Hotel'
+      expect(base_scraper.similar_enough?(a, b)).to be true
+    end
+
+    it 'returns false' do
+      b = 'Hotel Berlin Budapest'
+      a = 'wombat\'s CITY HOSTEL Budapest'
+      expect(base_scraper.similar_enough?(a, b)).to be false
+    end
+
+    it 'returns false' do
+      b = 'Hotel Berlin Budapest'
+      a = 'Hilton Berlin'
+      expect(base_scraper.similar_enough?(a, b)).to be false
+    end
+
+    it 'foo' do
+      b = 'Ephesia Hotel Kusadasi'
+      a = 'Ephesia Hotel - All Inclusive'
+      expect(base_scraper.similar_enough?(a, b)).to be true
+    end
+
+    it 'bar' do
+      b = 'Hotel Berlin Budapest'
+      a = 'Hotel Berlin'
+      expect(base_scraper.similar_enough?(a, b)).to be true
+    end
+
+    it 'foobar' do
+      b = 'Hotel Berlin'
+      a = 'Hilton Berlin'
+      expect(base_scraper.similar_enough?(a, b)).to be false
+    end
+
+    it 'barfoo' do
+      # p '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+      a = 'Jurys Inn Hotel Prague'
+      b = 'hotel berlin budapest'
+      expect(base_scraper.similar_enough?(a, b)).to be false
+    end
+
+    it 'zing' do
+      a = 'Ephesia Holiday Beach Club'
+      b = 'Ephesia Holiday Beach Club Kusadasi'
+      expect(base_scraper.similar_enough?(a, b)).to be true
+    end
+
+    it 'god damn it' do
+      a = 'my ass berlin'
+      b = 'hotel berlin'
+      expect(base_scraper.similar_enough?(a,b)).to be false
+    end
+
+    it 'out of things' do
+      a = 'hotel palazzo zichy'
+      b = 'hotel berlin budapest'
+      expect(base_scraper.similar_enough?(a,b)).to be false
+    end
+
+    it 'really' do
+      a = 'berlin grande'
+      b = 'hotel berlin'
+      expect(base_scraper.similar_enough?(a,b)).to be false
+    end
+  end
+
   describe '#get_hotel_page' do
     context 'hotel page not found' do
       it 'returns :not_found' do
