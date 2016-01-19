@@ -1,64 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Placefinder</title>
-	<link href="/css/bootstrap.min.css" rel="stylesheet" />
-	<style>
-		body {
-			background-color: #81b33a;
-		}
-
-		.panel {
-			margin-top: 20px;
-			width: 90%;
-		}
-
-		h3 {
-			margin-top: 0;
-			color: #81b33a;
-		}
-
-		.carousel {
-			width: 80%;
-
-		}
-
-		.tag {
-			display: inline-block;
-			background-color: #81b33a;
-			border-radius: 5px;
-			padding: 5px;
-			margin-bottom: 5px;
-		}
-
-		.bubble {
-		   position:relative;
-		   float:left;
-		   margin-left:12px;
-		   width:400px;
-		   padding:0px 20px;
-		   border-radius:10px;
-		   background-color:#FFFFFF;
-		   box-shadow:1px 1px 5px rgba(0,0,0,.4);
-		   margin-bottom: 20px;
-		   margin-left: 20px;
-   		}
-
-   		.carousel-inner > .item > img {
-		    margin: 0 auto;
-		}
-
-		.carousel-control.left, .carousel-control.right{ 
-background: none !important; 
-filter: progid:none !important; 
-}
-		
-	</style>
-</head>
-<body>
-	<div class="panel panel-default center-block">
+<div class="panel panel-default center-block">
 		<div class="panel-body">
-			<a href="/"><h3>Search again</h3></a>
+			<a href="/"><h3 id="search-again-button">Search again</h3></a>
 
 			<% if @data.has_key?('status') and @data['status'] != 'OK' %>
 				<p>Not found on Google Places. :(</p>
@@ -93,7 +35,7 @@ filter: progid:none !important;
 				<p>Reviews:</p>
 				<% if @data['reviews'] %>
 					<% @data['reviews'].each do |review| %>
-						<div class="bubble">
+						<div class="review-bubble">
 									  <p><%= review['text'] %></p>
 									  <p>- <%= review['author_name'] %></p>
 						       </div>
@@ -119,15 +61,18 @@ filter: progid:none !important;
 				<% if @data[:tripadvisor_highlights_tags] %>
 					<div>
 						<% @data[:tripadvisor_highlights_tags].each do |tag| %>
-							<span class="tag"><%= tag %></span>
+							<span class="tripadvisor-tag"><%= tag %></span>
 						<% end %>
 					</div>
 				<% end %>
 			<% end %>
 		</div>
 	</div>
+	
+	<%# content_for :additional_js %>
 	<script src="/js/jquery-2.1.4.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
+	<!-- <script src="/js/binary_ajax_request.js"></script> -->
 	<script type="text/javascript">
 			$(document).ready(function() {
 				// Magic JS
@@ -175,40 +120,38 @@ filter: progid:none !important;
 
 				<% unless @data.has_key?('status') and @data['status'] != 'OK' %>
 					<% if @data['photos'] %>
-					<% @data['photos'].each_with_index do |photo, index| %>
-						<% if index == 0 %>
-							$(".carousel-indicators").append('<li data-target="#gallery" data-slide-to="<%= index %>" class="active"></li>');
-						<% else %>
-							$(".carousel-indicators").append('<li data-target="#gallery" data-slide-to="<%= index %>"></li>');
+						<% @data['photos'].each_with_index do |photo, index| %>
+							<% if index == 0 %>
+								$(".carousel-indicators").append('<li data-target="#gallery" data-slide-to="<%= index %>" class="active"></li>');
+							<% else %>
+								$(".carousel-indicators").append('<li data-target="#gallery" data-slide-to="<%= index %>"></li>');
+							<% end %>
+							$.ajax("/get_photo/<%= photo['photo_reference'] %>", {
+								method: "GET",
+								dataType: "binary",
+								processData: false,
+								success: function(result){
+									var urlCreator = window.URL || window.webkitURL;
+									var imageUrl = urlCreator.createObjectURL( result );
+									$.ajax(imageUrl, {
+										method: "GET",
+										dataType: 'html',
+										success: function(result) {
+											var html = $('<div></div>').append(result);
+											var href = html.find("a").attr("href");
+											<% if index == 0 %>
+										$(".carousel-inner").append('<div class="item active"><img src="' + href + '" /></div>');
+									<% else %>
+										$(".carousel-inner").append('<div class="item"><img src="' + href + '" /></div>');
+									<% end %>
+										}
+									});
+									
+								},
+						
+							});
 						<% end %>
-						$.ajax("/get_photo/<%= photo['photo_reference'] %>", {
-							method: "GET",
-							dataType: "binary",
-							processData: false,
-							success: function(result){
-								var urlCreator = window.URL || window.webkitURL;
-								var imageUrl = urlCreator.createObjectURL( result );
-								$.ajax(imageUrl, {
-									method: "GET",
-									dataType: 'html',
-									success: function(result) {
-										var html = $('<div></div>').append(result);
-										var href = html.find("a").attr("href");
-										<% if index == 0 %>
-									$(".carousel-inner").append('<div class="item active"><img src="' + href + '" /></div>');
-								<% else %>
-									$(".carousel-inner").append('<div class="item"><img src="' + href + '" /></div>');
-								<% end %>
-									}
-								});
-								
-							},
-					
-						});
-					<% end %>
 					<% end %>
 				<% end %>
 			});
-			</script>
-</body>
-</html>
+	</script>

@@ -1,45 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Placefinder</title>
-	<link href="/css/bootstrap.min.css" rel="stylesheet" />
-	<style>
-		body {
-			background-color: #81b33a;
-		}
-		#search-wrapper {
-			width: 70%;
-			text-align: center;
-			position: absolute;
-			top: 50%;
-			transform: translateX(20%) translateY(-50%);
-			/*color: ;*/
-		}
+<div id="search-wrapper" class="center-block text-center pagination-centered ">
+	<h1>What place are you looking for?</h1>
 
-		.form-control:focus {
-			border-color: #3e3f3a;
-		}
+	<form method="post">
+		<div class="form-group">
+			<input type="text" name="search" id="search-bar" class="form-control" />
+		</div>
 
-		.btn-default {
-			color: #3e3f3a;
-		}
-	</style>
-</head>
-<body>
-	<div id="search-wrapper" class="center-block text-center pagination-centered ">
-		<h1>What place are you looking for?</h1>
-
-		<form method="post">
-			<div class="form-group">
-				<input type="text" name="search" class="form-control" />
-			</div>
-			<div class="form-group">
-			<button type="submit" class="btn btn-default  ">Search</button>
-			</div>
-		</form>
-	</div>
-
-	<script src="/js/jquery-2.1.4.js"></script>
-	<script src="/js/bootstrap.min.js"></script>
-</body>
-</html>
+		<div class="form-group">
+			<button type="submit" id="search-button" class="btn btn-default">Search</button>
+		</div>
+	</form>
+</div>
