@@ -16,67 +16,66 @@ describe BaseScraper do
 
   describe '#similar_enough?' do
     it 'returns true' do
-      b = 'Ephesia Hotel Kusadasi'
       a = 'Ephesia Hotel'
-      expect(base_scraper.similar_enough?(a, b)).to be true
-    end
-
-    it 'returns false' do
-      b = 'Hotel Berlin Budapest'
-      a = 'wombat\'s CITY HOSTEL Budapest'
-      expect(base_scraper.similar_enough?(a, b)).to be false
-    end
-
-    it 'returns false' do
-      b = 'Hotel Berlin Budapest'
-      a = 'Hilton Berlin'
-      expect(base_scraper.similar_enough?(a, b)).to be false
-    end
-
-    it 'foo' do
       b = 'Ephesia Hotel Kusadasi'
-      a = 'Ephesia Hotel - All Inclusive'
       expect(base_scraper.similar_enough?(a, b)).to be true
     end
 
-    it 'bar' do
+    it 'returns false' do
+      a = 'wombat\'s CITY HOSTEL Budapest'
       b = 'Hotel Berlin Budapest'
-      a = 'Hotel Berlin'
-      expect(base_scraper.similar_enough?(a, b)).to be true
-    end
-
-    it 'foobar' do
-      b = 'Hotel Berlin'
-      a = 'Hilton Berlin'
       expect(base_scraper.similar_enough?(a, b)).to be false
     end
 
-    it 'barfoo' do
-      # p '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+    it 'returns false' do
+      a = 'Hilton Berlin'
+      b = 'Hotel Berlin Budapest'
+      expect(base_scraper.similar_enough?(a, b)).to be false
+    end
+
+    it 'returns true' do
+      a = 'Ephesia Hotel - All Inclusive'
+      b = 'Ephesia Hotel Kusadasi'
+      expect(base_scraper.similar_enough?(a, b)).to be true
+    end
+
+    it 'returns true' do
+      a = 'Hotel Berlin'
+      b = 'Hotel Berlin Budapest'
+      expect(base_scraper.similar_enough?(a, b)).to be true
+    end
+
+    it 'returns false' do
+      a = 'Hilton Berlin'
+      b = 'Hotel Berlin'
+      expect(base_scraper.similar_enough?(a, b)).to be false
+    end
+
+    it 'returns false' do
       a = 'Jurys Inn Hotel Prague'
       b = 'hotel berlin budapest'
       expect(base_scraper.similar_enough?(a, b)).to be false
     end
 
-    it 'zing' do
+    it 'returns true' do
       a = 'Ephesia Holiday Beach Club'
       b = 'Ephesia Holiday Beach Club Kusadasi'
       expect(base_scraper.similar_enough?(a, b)).to be true
     end
 
-    it 'god damn it' do
-      a = 'my ass berlin'
+    it 'returns false' do
+      a = 'blah blah berlin'
       b = 'hotel berlin'
       expect(base_scraper.similar_enough?(a,b)).to be false
     end
 
-    it 'out of things' do
+    it 'returns false' do
       a = 'hotel palazzo zichy'
       b = 'hotel berlin budapest'
       expect(base_scraper.similar_enough?(a,b)).to be false
     end
 
-    it 'really' do
+    pending do
       a = 'berlin grande'
       b = 'hotel berlin'
       expect(base_scraper.similar_enough?(a,b)).to be false

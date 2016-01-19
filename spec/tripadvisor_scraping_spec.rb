@@ -24,16 +24,16 @@ describe TripAdvisorScraping do
       end
     end
 
-    # context 'target does not exist in page' do
-    #   it 'returns false' do
-    #     html = '<div class="title"><span>' \
-    #       '<span class="highlighted">Hotel name</span>' \
-    #       '</span></div>'
+    context 'target does not exist in page' do
+      it 'returns false' do
+        html = '<div class="title"><span>' \
+          '<span class="highlighted">Hotel name</span>' \
+          '</span></div>'
         
-    #     page = create_page(html)
-    #     expect(tripadvisor.found_place?(page, 'Unknown hotel')).to be false
-    #   end
-    # end
+        page = create_page(html)
+        expect(tripadvisor.found_place?(page, 'Unknown hotel')).to be false
+      end
+    end
   end
 
   describe '#get_container_div' do

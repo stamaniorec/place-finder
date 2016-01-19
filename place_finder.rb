@@ -17,9 +17,8 @@ post '/' do
   erb :results
 end
 
-get '/place/:name/:place_id' do
-  @name = params[:name]
-  @data = build_data(@name, params[:place_id])
+get '/place/:place_id' do
+  @data = build_data(params[:place_id])
   erb :place
 end
 
