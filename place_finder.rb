@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'sinatra/content_for2'
+require 'unidecoder'
 
 require_relative 'apis/google_places'
 require_relative 'scrapers/booking_scraping'

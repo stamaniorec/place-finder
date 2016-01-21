@@ -16,8 +16,8 @@ describe BaseScraper do
 
   describe '#similar_enough?' do
     it 'returns true' do
-      a = 'Ephesia Hotel'
-      b = 'Ephesia Hotel Kusadasi'
+      a = 'Ephesia Hotel Kusadasi'
+      b = 'Ephesia Hotel'
       expect(base_scraper.similar_enough?(a, b)).to be true
     end
 
@@ -34,14 +34,8 @@ describe BaseScraper do
     end
 
     it 'returns true' do
-      a = 'Ephesia Hotel - All Inclusive'
-      b = 'Ephesia Hotel Kusadasi'
-      expect(base_scraper.similar_enough?(a, b)).to be true
-    end
-
-    it 'returns true' do
-      a = 'Hotel Berlin'
-      b = 'Hotel Berlin Budapest'
+      a = 'Hotel Berlin Budapest'
+      b = 'Hotel Berlin'
       expect(base_scraper.similar_enough?(a, b)).to be true
     end
 
@@ -58,8 +52,8 @@ describe BaseScraper do
     end
 
     it 'returns true' do
-      a = 'Ephesia Holiday Beach Club'
-      b = 'Ephesia Holiday Beach Club Kusadasi'
+      a = 'Ephesia Holiday Beach Club Kusadasi'
+      b = 'Ephesia Holiday Beach Club'
       expect(base_scraper.similar_enough?(a, b)).to be true
     end
 
@@ -75,10 +69,28 @@ describe BaseScraper do
       expect(base_scraper.similar_enough?(a,b)).to be false
     end
 
-    pending do
+    it 'returns false' do
       a = 'berlin grande'
       b = 'hotel berlin'
       expect(base_scraper.similar_enough?(a,b)).to be false
+    end
+
+    pending do
+      a = 'Ephesia Hotel - All Inclusive'
+      b = 'Ephesia Hotel Kusadasi'
+      expect(base_scraper.similar_enough?(a, b)).to be true
+    end
+
+    it 'does a thing' do
+      a = 'Olympik Tristar'
+      b = 'Hotel Olympik Tristar'
+      expect(base_scraper.similar_enough?(a, b)).to be true
+    end
+
+    it 'and anotheer' do
+      a = 'olympik tristar '
+      b = 'Hotel Olympik Tristar'
+      expect(base_scraper.similar_enough?(a, b)).to be true
     end
   end
 

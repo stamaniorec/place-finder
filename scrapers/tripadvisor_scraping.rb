@@ -12,15 +12,15 @@ class TripAdvisorScraping < BaseScraper
     "#{endpoint}Search?q=#{place_name}"
   end
 
-  def found_place?(page, target)
-    page.search('.title').any? do |place_name|
-      similar_enough?(Sanitize.clean(place_name.child.inner_html), target)
-    end
-  end
+  # def found_place?(page, target)
+  #   page.search('.title').any? do |place_name|
+  #     similar_enough?(target, Sanitize.clean(place_name.child.inner_html))
+  #   end
+  # end
 
-  def get_container_div(suggestions_page)
-    suggestions_page.search('.title')[1]
-  end
+  # def get_container_div(suggestions_page)
+  #   suggestions_page.search('.title')[1]
+  # end
 
   def get_div_onclick_value(div)
     div['onclick'].match(/\/[\w-]+.html/).to_s
@@ -30,9 +30,37 @@ class TripAdvisorScraping < BaseScraper
     endpoint + onclick_value
   end
 
+  def get_hotel_page(query)
+    begin
+    suggestions_page = get_suggestions_page(query)
+    rescue Mechanize::ResponseCodeError => _404_error
+      return :not_found
+    end
+
+    suggestions_page.search('.title').each do |place_name|
+      p "query is #{query}"
+      p "very imporatnt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+      p "#{place_name}"
+      p "#{place_name.child}"
+      p "other thing is #{Sanitize.clean(place_name.child.inner_html)}"
+      if similar_enough?(query, Sanitize.clean(place_name.child.inner_html))
+        p "clicking on #{place_name}"
+        return navigate_to_hotel_page(suggestions_page, place_name)
+        # container_div = get_container_div(suggestions_page)
+        # onclick_value = get_div_onclick_value(container_div)
+        # @browser.get(get_target_link(onclick_value))
+        # return @browser.click(place_name)
+      end
+    end
+
+    # return :not_found unless hotel_list
+
+    :not_found
+  end
+
   def navigate_to_hotel_page(suggestions_page, place_name)
-    container_div = get_container_div(suggestions_page)
-    onclick_value = get_div_onclick_value(container_div)
+    # container_div = get_container_div(suggestions_page)
+    onclick_value = get_div_onclick_value(place_name)
     @browser.get(get_target_link(onclick_value))
   end
 

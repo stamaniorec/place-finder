@@ -66,6 +66,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.1)
+    unidecoder (1.1.2)
     webrobots (0.1.2)
 
 PLATFORMS
@@ -79,6 +80,7 @@ DEPENDENCIES
   sinatra
   sinatra-content-for2
   sinatra-contrib
+  unidecoder
 
 BUNDLED WITH
    1.11.2
