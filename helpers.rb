@@ -23,9 +23,6 @@ helpers do
       return google_places
     end
 
-    p 'getting locality'
-    p "#{get_locality(google_places)}"
-    p google_places
     query = "#{google_places['name']} #{get_locality(google_places)}"
 
     booking = BookingScraping.new.get_data(query)

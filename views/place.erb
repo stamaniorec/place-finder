@@ -3,7 +3,7 @@
 			<a href="/"><h3 id="search-again-button">Search again</h3></a>
 
 			<% if @data.has_key?('status') and @data['status'] != 'OK' %>
-				<p>Not found on Google Places. :(</p>
+				<p>Whoops, something went wrong. :(</p>
 			<% else %>
 				<% if @data['photos'] %>
 					<div id="gallery" class="carousel slide center-block" data-ride="carousel">

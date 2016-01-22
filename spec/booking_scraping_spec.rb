@@ -28,9 +28,9 @@ describe BookingScraping do
   end
 
   describe '#get_search_url' do
-    it 'returns the search url for the given place name' do
+    it 'returns the search url for the given query' do
       place_name = 'place'
-      result = 'http://www.booking.com/search.bg.html?si=ai%2Cco%2Cci%2Cre%2Cdi&ss=place/'
+      result = 'http://www.booking.com/search.html?si=ai%2Cco%2Cci%2Cre%2Cdi&ss=place/'
       expect(booking.get_search_url(place_name)).to eq(result)
     end
   end
@@ -61,22 +61,80 @@ describe BookingScraping do
     end
   end
 
-  describe '#found_place?' do
+  describe '#set_success' do
+    it 'adds pair booking_status: :ok in given data hash' do
+      expect(booking.set_success({})).to eq({booking_status: :ok})
+    end
+  end
+
+  describe '#set_error' do
+    it 'adds pair booking_status: :not_found in given data hash' do
+      expect(booking.set_error({})).to eq({booking_status: :not_found})
+    end
+  end
+
+  describe '#navigate_from_suggestions_page_to_hotel_page' do
     before do
-      place = double
-      allow(place).to receive(:inner_html).and_return('foo')
-      allow(hotel_page).to receive(:search).with('.destination_name').and_return([place])
+      @suggestions_page = double
+      @query = double
     end
 
-    context 'target exists in page' do
-      it 'returns true' do
-        expect(booking.found_place?(hotel_page, 'foo')).to eq(true)
+    context 'hotel found on suggestions page' do
+      it 'delegates finding the hotel page to the navigate_from_hotel_list_to_hotel_page method' do
+        hotel_list = double
+
+        allow(booking).to receive(:get_hotel_list)
+                          .with(@suggestions_page, @query)
+                          .and_return(hotel_list)
+
+        allow(booking).to receive(:navigate_from_hotel_list_to_hotel_page)
+                          .with(hotel_list, @query)
+                          .and_return('something')
+
+        expectation = booking.navigate_from_suggestions_page_to_hotel_page(@suggestions_page, @query)
+        expect(expectation).to eq('something')
       end
     end
 
-    context 'target doe not exist in page' do
-      it 'returns true' do
-        expect(booking.found_place?(hotel_page, 'bar')).to eq(false)
+    context 'hotel is not found on suggestions page' do
+      it 'returns :not_found' do
+        allow(booking).to receive(:get_hotel_list)
+                          .with(@suggestions_page, @query)
+                          .and_return(nil)
+
+        expectation = booking.navigate_from_suggestions_page_to_hotel_page(@suggestions_page, @query)
+        expect(expectation).to eq(:not_found)
+      end
+    end
+  end
+
+  describe '#get_hotel_list' do
+    before do
+      @suggestions_page = double
+      @query = double
+    end
+
+    context 'result was found automatically' do
+      it 'returns the page it hit which is the hotel list not the suggestions page' do
+        allow(booking).to receive(:found_result_automatically?)
+                          .with(@suggestions_page)
+                          .and_return(true)
+
+        expect(booking.get_hotel_list(@suggestions_page, @query)).to eq(@suggestions_page)
+      end
+    end
+
+    context 'result was not found automatically, browser was redirected to suggestions page' do
+      it 'returns the correct suggestion' do
+        allow(booking).to receive(:found_result_automatically?)
+                          .with(@suggestions_page)
+                          .and_return(false)
+
+        allow(booking).to receive(:get_correct_suggestion)
+                          .with(@suggestions_page, @query)
+                          .and_return('result')
+
+        expect(booking.get_hotel_list(@suggestions_page, @query)).to eq('result')
       end
     end
   end
