@@ -73,6 +73,10 @@ class BookingScraping < BaseScraper
     data.tap { |data| data[:booking_status] = :ok }
   end
 
+  def build_query(google_places_data)
+    "#{google_places_data['name']} #{get_locality(google_places_data)}"
+  end
+
   def build_data(hotel_page, data)
     data.tap do |data|
       data[:stars] = get_stars(hotel_page)
@@ -83,6 +87,3 @@ class BookingScraping < BaseScraper
     end
   end
 end
-
-# a = BookingScraping.new
-# a.get_data('fad')

@@ -92,6 +92,18 @@ describe BaseScraper do
       b = 'Ephesia Hotel Kusadasi'
       expect(base_scraper.similar_enough?(a, b)).to be true
     end
+
+    pending do
+      a = 'Avalon Hôtel Paris '
+      b = 'Avalon Hotel - Gare du Nord Paris'
+      expect(base_scraper.similar_enough?(a, b)).to be true
+    end
+
+    pending do
+      a = 'Avalon Hôtel Paris '
+      b = 'Avalon Paris Hotel'
+      expect(base_scraper.similar_enough?(a, b)).to be true
+    end
   end
 
   describe '#get_hotel_page' do
@@ -128,10 +140,13 @@ describe BaseScraper do
 
   describe '#get_data' do
     it 'returns a hash' do
-      allow(base_scraper).to receive(:get_hotel_page)
+      query = double
+      google_places_data = double
+      allow(base_scraper).to receive(:build_query).with(google_places_data).and_return(query)
+      allow(base_scraper).to receive(:get_hotel_page).with(query)
       allow(base_scraper).to receive(:set_success)
       allow(base_scraper).to receive(:build_data)
-      expect(base_scraper.get_data('name')).to be_a Hash
+      expect(base_scraper.get_data(google_places_data)).to be_a Hash
     end
   end
 end

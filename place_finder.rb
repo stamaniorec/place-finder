@@ -8,6 +8,7 @@ require_relative 'scrapers/booking_scraping'
 require_relative 'scrapers/tripadvisor_scraping'
 
 require_relative 'helpers'
+include Helpers
 
 get '/' do
   erb :index

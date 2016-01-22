@@ -12,39 +12,31 @@ describe TripAdvisorScraping do
     Mechanize::Page.new(nil, nil, html_content, nil, @mechanize)
   end
 
-  # describe '#found_place' do
-  #   context 'target exists in page' do
-  #     it 'returns true' do
-  #       html = '<div class="title"><span>' \
-  #         '<span class="highlighted">Hotel name</span>' \
-  #         '</span></div>'
+  describe '#get_rank_text' do
+    it 'returns the rank text from a tripadvisor hotel page' do
+      html = %{
+        <div class="popRanking popIndexValidation rank_text wrap" onclick="ta.trackEventOnPage('Hotel_Review', 'HOTELS_CLICK');">
+          <b class="rank">#988</b> of 1,807 <a href="/Hotels-g187147-Paris_Ile_de_France-Hotels.html">Hotels in Paris</a>
+        </div>
+      }
 
-  #       page = create_page(html)
-  #       expect(tripadvisor.found_place?(page, 'Hotel name')).to be true
-  #     end
-  #   end
+      page = create_page(html)
+      expect(tripadvisor.get_rank_text(page)).to eq('#988 of 1,807 Hotels in Paris')
+    end
+  end
 
-  #   context 'target does not exist in page' do
-  #     it 'returns false' do
-  #       html = '<div class="title"><span>' \
-  #         '<span class="highlighted">Hotel name</span>' \
-  #         '</span></div>'
-        
-  #       page = create_page(html)
-  #       expect(tripadvisor.found_place?(page, 'Unknown hotel')).to be false
-  #     end
-  #   end
-  # end
+  describe '#get_rating_value' do
+    it 'returns the rating value from a tripadvisor hotel page' do
+      html = %{
+        <span class="rate sprite-rating_rr rating_rr">
+          <img class="sprite-rating_rr_fill rating_rr_fill rr35" width='63' property="ratingValue" content="3.5" src="http://static.tacdn.com/img2/x.gif" alt="3.5 of 5 stars">
+        </span>
+      }
 
-  # describe '#get_container_div' do
-  #   it 'gets the div containing the name of the hotel and the link to its page' do
-  #     first_div = '<div class="title">Not ready to book?</div>'
-  #     second_div = '<div class="title"><span><span class="highlighted">Pine Bay Holiday Resort</span></span></div>'
-  #     page = create_page(first_div + second_div)
-
-  #     expect(tripadvisor.get_container_div(page).to_html).to eq(second_div)
-  #   end
-  # end
+      page = create_page(html)
+      expect(tripadvisor.get_rating_value(page)).to eq('3.5 of 5 stars')
+    end
+  end
 
   describe '#get_div_onclick_value' do
     it 'gets the div onclick attribute value from the container div' do

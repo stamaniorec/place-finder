@@ -50,7 +50,8 @@ class BaseScraper
     page.uri.to_s
   end
 
-  def get_data(query)
+  def get_data(google_places_data)
+    query = build_query(google_places_data)
     hotel_page = get_hotel_page(query)
 
     {}.tap do |data|

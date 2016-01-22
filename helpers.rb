@@ -1,4 +1,4 @@
-helpers do
+module Helpers
   def get_suggestions(query)
     GooglePlaces::TextSearch::text_search(query)
   end
@@ -16,6 +16,13 @@ helpers do
     locality_component ? locality_component['long_name'] : ''
   end
 
+  def platforms
+    [
+      BookingScraping,
+      TripAdvisorScraping,
+    ]
+  end
+
   def build_data(place_id)
     google_places = GooglePlaces::PlaceDetails.place_details(place_id)
 
@@ -23,11 +30,8 @@ helpers do
       return google_places
     end
 
-    query = "#{google_places['name']} #{get_locality(google_places)}"
-
-    booking = BookingScraping.new.get_data(query)
-    tripadvisor = TripAdvisorScraping.new.get_data(query)
-
-    google_places.merge(booking).merge(tripadvisor)
+    platforms.each_with_object(google_places) do |platform, data|
+      data.merge!(platform.new.get_data(data))
+    end
   end
 end

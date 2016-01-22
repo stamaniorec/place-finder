@@ -65,6 +65,10 @@ class TripAdvisorScraping < BaseScraper
     data.tap { |data| data[:tripadvisor_status] = :ok }
   end
 
+  def build_query(google_places_data)
+    "#{google_places_data['name']}"
+  end
+
   def build_data(hotel_page, data)
     data.tap do |data|
       data[:tripadvisor_rating_score] = get_rating_value(hotel_page)
