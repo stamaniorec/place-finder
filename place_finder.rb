@@ -3,6 +3,11 @@ require 'sinatra/reloader' if development?
 require 'sinatra/content_for2'
 require 'unidecoder'
 
+require 'sinatra/activerecord'
+set :database, {adapter: 'sqlite3', database: 'db.sqlite3'}
+
+require_relative 'models/user'
+
 require_relative 'apis/google_places'
 require_relative 'scrapers/booking_scraping'
 require_relative 'scrapers/tripadvisor_scraping'
@@ -27,4 +32,8 @@ end
 
 get '/get_photo/:photo_reference' do
   GooglePlaces::PlacePhoto::place_photo(params[:photo_reference])
+end
+
+get '/users' do
+  User.all
 end
