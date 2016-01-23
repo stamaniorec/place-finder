@@ -7,11 +7,43 @@
 </head>
 <body>
 	<div id="main">
+		<div id="user-nav">
+			<% if current_user %>
+				Logged in as <%= current_user.email %> |
+				<a href="/logout">Log out</a>
+			<% else %>
+				<a href="/sign_up">Sign up</a> |
+				<a href="/login">Log in</a>
+			<% end %>
+		</div>
+
+		<% if flash[:success] %>
+			<div class="alert alert-success"><%= flash[:success] %></div>
+		<% end %>
+
+		<% if flash[:notice] %>
+			<div class="alert alert-info"><%= flash[:notice] %></div>
+		<% end %>
+
+		<% if flash[:errors] %>
+			<% flash[:errors].each do |error| %>
+				<div class="alert alert-danger"><%= error %></div>
+			<% end %>
+		<% end %>
+
 		<%= yield %>
 	</div>
 
 	<script src="/js/jquery-2.1.4.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
+
+	<script>
+	$(function() {
+		$('.alert').delay(500).fadeIn('normal', function() {
+			$(this).delay(2000).fadeOut();
+		});
+	});
+	</script>
 
 	<%# yield_content :additional_js %>
 </body>

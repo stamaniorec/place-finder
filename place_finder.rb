@@ -1,7 +1,9 @@
 require 'sinatra'
+require 'sinatra/flash'
 require 'sinatra/reloader' if development?
 require 'sinatra/content_for2'
 require 'unidecoder'
+require 'bcrypt'
 
 require 'sinatra/activerecord'
 set :database, {adapter: 'sqlite3', database: 'db.sqlite3'}
@@ -14,6 +16,8 @@ require_relative 'scrapers/tripadvisor_scraping'
 
 require_relative 'helpers'
 include Helpers
+
+enable :sessions
 
 get '/' do
   erb :index
@@ -34,6 +38,4 @@ get '/get_photo/:photo_reference' do
   GooglePlaces::PlacePhoto::place_photo(params[:photo_reference])
 end
 
-get '/users' do
-  User.all
-end
+require_relative 'routes/auth'
