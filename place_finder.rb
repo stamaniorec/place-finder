@@ -45,7 +45,7 @@ get '/' do
 end
 
 post '/' do
-  @query = URI.encode(params[:search])
+  @query = params[:search]
   @suggestions = get_suggestions(@query)
   erb :results
 end
