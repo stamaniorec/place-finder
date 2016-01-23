@@ -23,7 +23,7 @@ module Helpers
   end
 
   def get_suggestions(query)
-    GooglePlaces::TextSearch::text_search(query)
+    GooglePlaces::TextSearch::text_search(URI.encode(query))
   end
 
   def successful?(response)

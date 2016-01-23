@@ -14,12 +14,30 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    addressable (2.4.0)
     arel (6.0.3)
     backports (3.6.7)
     bcrypt (3.1.10)
     builder (3.2.2)
     crass (1.0.2)
+    data_objects (0.10.16)
+      addressable (~> 2.1)
     diff-lcs (1.2.5)
+    dm-core (1.2.1)
+      addressable (~> 2.3)
+    dm-do-adapter (1.2.0)
+      data_objects (~> 0.10.6)
+      dm-core (~> 1.2.0)
+    dm-postgres-adapter (1.2.0)
+      dm-do-adapter (~> 1.2.0)
+      do_postgres (~> 0.10.6)
+    dm-sqlite-adapter (1.2.0)
+      dm-do-adapter (~> 1.2.0)
+      do_sqlite3 (~> 0.10.6)
+    do_postgres (0.10.16)
+      data_objects (= 0.10.16)
+    do_sqlite3 (0.10.16)
+      data_objects (= 0.10.16)
     domain_name (0.5.25)
       unf (>= 0.0.5, < 1.0.0)
     http-cookie (1.0.2)
@@ -46,6 +64,7 @@ GEM
     nokogumbo (1.4.7)
       nokogiri
     ntlm-http (0.1.1)
+    pg (0.18.4)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
@@ -103,8 +122,11 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt
+  dm-postgres-adapter
+  dm-sqlite-adapter
   mechanize
   nokogiri
+  pg
   rake
   rspec
   sanitize

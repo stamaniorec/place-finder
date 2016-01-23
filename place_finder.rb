@@ -4,9 +4,26 @@ require 'sinatra/reloader' if development?
 require 'sinatra/content_for2'
 require 'unidecoder'
 require 'bcrypt'
+require 'uri'
 
 require 'sinatra/activerecord'
-set :database, {adapter: 'sqlite3', database: 'db.sqlite3'}
+
+configure :development do
+  set :database, {adapter: 'sqlite3', database: 'db.sqlite3'}
+end
+
+configure :production do
+  db = URI.parse(ENV['DATABASE_URL'] || 'postgres:///localhost/mydb')
+
+  ActiveRecord::Base.establish_connection(
+    :adapter  => db.scheme == 'postgres' ? 'postgresql' : db.scheme,
+    :host     => db.host,
+    :username => db.user,
+    :password => db.password,
+    :database => db.path[1..-1],
+    :encoding => 'unicode'
+  )
+end
 
 require_relative 'models/user'
 
