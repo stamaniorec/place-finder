@@ -6,7 +6,14 @@ require 'unidecoder'
 require 'bcrypt'
 
 require 'sinatra/activerecord'
-set :database, {adapter: 'sqlite3', database: 'db.sqlite3'}
+
+configure :development do
+  set :database, {adapter: 'sqlite3', database: 'db.sqlite3'}
+end
+
+configure :production do
+  set :database, {adapter: 'postgres', database: ENV['DATABASE_URL']}
+end
 
 require_relative 'models/user'
 
