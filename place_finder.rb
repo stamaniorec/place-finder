@@ -11,8 +11,21 @@ configure :development do
   set :database, {adapter: 'sqlite3', database: 'db.sqlite3'}
 end
 
+# configure :production do
+#   set :database, {adapter: 'postgresql', database: ENV['DATABASE_URL'], host: 127.0.0.1, encoding: 'unicode', pool: 5, port: 5432}
+# end
+
 configure :production do
-  set :database, {adapter: 'postgresql', database: ENV['DATABASE_URL'], host: '127.0.0.1', encoding: 'unicode', pool: 5, port: 5432}
+ db = URI.parse(ENV['DATABASE_URL'] || 'postgres:///localhost/mydb')
+
+ ActiveRecord::Base.establish_connection(
+   :adapter  => db.scheme == 'postgres' ? 'postgresql' : db.scheme,
+   :host     => db.host,
+   :username => db.user,
+   :password => db.password,
+   :database => db.path[1..-1],
+   :encoding => 'unicode'
+ )
 end
 
 require_relative 'models/user'
