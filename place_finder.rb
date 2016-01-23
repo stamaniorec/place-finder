@@ -4,6 +4,7 @@ require 'sinatra/reloader' if development?
 require 'sinatra/content_for2'
 require 'unidecoder'
 require 'bcrypt'
+require 'uri'
 
 require 'sinatra/activerecord'
 
@@ -44,7 +45,7 @@ get '/' do
 end
 
 post '/' do
-  @query = params[:search]
+  @query = URI.encode(params[:search])
   @suggestions = get_suggestions(@query)
   erb :results
 end
