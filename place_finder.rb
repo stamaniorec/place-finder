@@ -12,7 +12,7 @@ configure :development do
 end
 
 configure :production do
-  set :database, {adapter: 'postgres', database: ENV['DATABASE_URL']}
+  set :database, {adapter: 'postgresql', database: ENV['DATABASE_URL']}
 end
 
 require_relative 'models/user'
