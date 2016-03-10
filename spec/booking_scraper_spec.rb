@@ -1,7 +1,7 @@
-require_relative '../scrapers/booking_scraping'
+require_relative '../scrapers/booking_scraper'
 
-describe BookingScraping do
-  subject(:booking) { BookingScraping.new }
+describe BookingScraper do
+  subject(:booking) { BookingScraper.new }
   let(:hotel_page) { double }
 
   describe '#build_data' do

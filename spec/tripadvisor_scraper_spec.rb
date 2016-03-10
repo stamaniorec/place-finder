@@ -1,8 +1,8 @@
-require_relative '../scrapers/tripadvisor_scraping'
+require_relative '../scrapers/tripadvisor_scraper'
 require 'nokogiri'
 
-describe TripAdvisorScraping do
-  subject(:tripadvisor) { TripAdvisorScraping.new }
+describe TripAdvisorScraper do
+  subject(:tripadvisor) { TripAdvisorScraper.new }
 
   before(:all) do
     @mechanize = Mechanize.new

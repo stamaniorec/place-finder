@@ -28,8 +28,8 @@ end
 require_relative 'models/user'
 
 require_relative 'apis/google_places'
-require_relative 'scrapers/booking_scraping'
-require_relative 'scrapers/tripadvisor_scraping'
+require_relative 'scrapers/booking_scraper'
+require_relative 'scrapers/tripadvisor_scraper'
 
 require_relative 'helpers'
 include Helpers

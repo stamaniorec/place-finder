@@ -13,9 +13,7 @@ class TripAdvisorScraping < BaseScraper
   end
 
   def navigate_from_suggestions_page_to_hotel_page(suggestions_page, query)
-    p "QUERY #{query}"
     suggestions_page.search('.title').each do |place_name|
-      p "SUGGESTION #{Sanitize.clean(place_name.child.inner_html)}"
       if similar_enough?(query, Sanitize.clean(place_name.child.inner_html))
         onclick_value = get_div_onclick_value(place_name)
         return @browser.get(get_target_link(onclick_value))
@@ -47,6 +45,7 @@ class TripAdvisorScraping < BaseScraper
 
   def get_highlight_tags(hotel_page)
     container_div = hotel_page.at('.amenity_cnt')
+    return [] unless container_div 
     property_tags_wrap_div = container_div.children[3]
     property_tags_ul = property_tags_wrap_div.children[1]
 
